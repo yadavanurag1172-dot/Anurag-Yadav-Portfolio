@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" class="motion-page-html">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Motion Work — Anurag Yadav</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="work.css" />
+</head>
+<body class="motion-page motion-grid-page">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a class="nav-logo" href="index.html">Anurag Yadav</a>
+    <ul class="nav-links">
+      <li><a href="index.html#panel-work" class="nav-back">← Work</a></li>
+      <li><a href="index.html#panel-about">About</a></li>
+      <li><a href="index.html#panel-contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- MOTION GRID PAGE -->
+<main class="motion-gallery-only">
+
+  <!-- ONLY ONE LANDSCAPE VIDEO — 16:9 -->
+  <section class="motion-landscape-row">
+    <article class="motion-video-card landscape-card" onclick="openMotionModal('videos/video1.mp4')">
+      <video src="videos/video1.mp4" poster="images/motion/thumb1.jpg" muted loop playsinline preload="metadata"></video>
+    </article>
+  </section>
+
+  <!-- REST ALL VIDEOS — 9:16 GRID -->
+  <section class="motion-portrait-grid">
+
+    <article class="motion-video-card portrait-card" onclick="openMotionModal('videos/video2.mp4')">
+      <video src="videos/video2.mp4" poster="images/motion/thumb2.jpg" muted loop playsinline preload="metadata"></video>
+    </article>
+
+    <article class="motion-video-card portrait-card" onclick="openMotionModal('videos/video3.mp4')">
+      <video src="videos/video3.mp4" poster="images/motion/thumb3.jpg" muted loop playsinline preload="metadata"></video>
+    </article>
+
+    <article class="motion-video-card portrait-card" onclick="openMotionModal('videos/video4.mp4')">
+      <video src="videos/video4.mp4" poster="images/motion/thumb4.jpg" muted loop playsinline preload="metadata"></video>
+    </article>
+
+    <article class="motion-video-card portrait-card" onclick="openMotionModal('videos/video5.mp4')">
+      <video src="videos/video5.mp4" poster="images/motion/thumb5.jpg" muted loop playsinline preload="metadata"></video>
+    </article>
+
+    <article class="motion-video-card portrait-card" onclick="openMotionModal('videos/video6.mp4')">
+      <video src="videos/video6.mp4" poster="images/motion/thumb6.jpg" muted loop playsinline preload="metadata"></video>
+    </article>
+
+    <article class="motion-video-card portrait-card" onclick="openMotionModal('videos/video7.mp4')">
+      <video src="videos/video7.mp4" poster="images/motion/thumb7.jpg" muted loop playsinline preload="metadata"></video>
+    </article>
+
+    <article class="motion-video-card portrait-card" onclick="openMotionModal('videos/video8.mp4')">
+      <video src="videos/video8.mp4" poster="images/motion/thumb8.jpg" muted loop playsinline preload="metadata"></video>
+    </article>
+
+    <article class="motion-video-card portrait-card" onclick="openMotionModal('videos/video9.mp4')">
+      <video src="videos/video9.mp4" poster="images/motion/thumb9.jpg" muted loop playsinline preload="metadata"></video>
+    </article>
+
+    <article class="motion-video-card portrait-card" onclick="openMotionModal('videos/video10.mp4')">
+      <video src="videos/video10.mp4" poster="images/motion/thumb10.jpg" muted loop playsinline preload="metadata"></video>
+    </article>
+
+  </section>
+
+</main>
+
+<!-- MOTION VIDEO MODAL -->
+<div class="motion-modal" id="motionModal">
+  <button class="motion-modal-close" onclick="closeMotionModal()">×</button>
+  <video id="motionModalVideo" controls playsinline></video>
+</div>
+
+<script>
+  function openMotionModal(src) {
+    const modal = document.getElementById('motionModal');
+    const video = document.getElementById('motionModalVideo');
+
+    video.src = src;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    video.play().catch(function () {});
+  }
+
+  function closeMotionModal() {
+    const modal = document.getElementById('motionModal');
+    const video = document.getElementById('motionModalVideo');
+
+    modal.classList.remove('open');
+    video.pause();
+
+    setTimeout(function () {
+      video.src = '';
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeMotionModal();
+  });
+
+  document.getElementById('motionModal').addEventListener('click', function (e) {
+    if (e.target.id === 'motionModal') closeMotionModal();
+  });
+
+  document.querySelectorAll('.motion-video-card video').forEach(function (video) {
+    const card = video.closest('.motion-video-card');
+
+    card.addEventListener('mouseenter', function () {
+      video.play().catch(function () {});
+    });
+
+    card.addEventListener('mouseleave', function () {
+      video.pause();
+      video.currentTime = 0;
+    });
+  });
+
+  document.querySelectorAll('.nav-links a').forEach(function (link) {
+    const href = link.getAttribute('href') || '';
+
+    if (!href.includes('#')) return;
+
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      const parts = href.split('#');
+      const page = parts[0];
+      const hash = parts[1];
+
+      if (hash) {
+        sessionStorage.setItem('scrollToPanel', hash);
+      }
+
+      window.location.href = page || 'index.html';
+    });
+  });
+
+  /* ============================================================
+   MOBILE VIDEO AUTOPLAY + LOOP FIX
+============================================================ */
+const motionVideos = document.querySelectorAll('.motion-video-card video');
+
+motionVideos.forEach(function (video) {
+  video.muted = true;
+  video.loop = true;
+  video.playsInline = true;
+
+  video.addEventListener('ended', function () {
+    video.currentTime = 0;
+    video.play().catch(function () {});
+  });
+});
+
+const videoObserver = new IntersectionObserver(function (entries) {
+  entries.forEach(function (entry) {
+    const video = entry.target;
+
+    if (entry.isIntersecting) {
+      video.muted = true;
+      video.play().catch(function () {});
+    } else {
+      video.pause();
+    }
+  });
+}, {
+  threshold: 0.35
+});
+
+motionVideos.forEach(function (video) {
+  videoObserver.observe(video);
+});
+
+</script>
+
+</body>
+</html>
